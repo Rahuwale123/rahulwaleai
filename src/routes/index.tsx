@@ -920,13 +920,13 @@ function Contact() {
             href="tel:+919356853041"
           />
           <ContactRow
-            icon={<Linkedin className="size-4" />}
+            icon={<LinkedinIcon className="size-4" />}
             label="LinkedIn"
             value="linkedin.com/in/rahul-wale"
             href="https://linkedin.com/in/rahul-wale"
           />
           <ContactRow
-            icon={<Github className="size-4" />}
+            icon={<GithubIcon className="size-4" />}
             label="GitHub"
             value="github.com/Rahuwale123"
             href="https://github.com/Rahuwale123"
