@@ -438,21 +438,47 @@ function About() {
           className="md:col-span-5"
         >
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-hairline shadow-soft">
-            <img
-              src={portraitImg}
-              alt="Rahul Wale"
-              loading="lazy"
-              width={800}
-              height={1024}
-              className="size-full object-cover"
+            {/* WANTED poster — mysterious founder */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--surface-2),var(--background))]" />
+            <div className="absolute inset-0 grid-bg opacity-40" aria-hidden />
+
+            <div className="absolute inset-x-0 top-6 text-center">
+              <div className="text-[10px] font-bold uppercase tracking-[0.5em] text-muted-foreground">
+                — Wanted —
+              </div>
+              <div className="mt-1 text-xs font-semibold uppercase tracking-[0.3em] text-foreground/70">
+                AI Founder · Builder · Shipper
+              </div>
+            </div>
+
+            <motion.div
+              animate={{ scale: [1, 1.04, 1], rotate: [-1, 1, -1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 grid place-items-center"
+            >
+              <span
+                className="text-gradient select-none font-semibold leading-none tracking-tighter"
+                style={{ fontSize: "clamp(12rem, 26vw, 22rem)" }}
+              >
+                ?
+              </span>
+            </motion.div>
+
+            {/* soft glow */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{ background: "radial-gradient(closest-side, var(--glow), transparent 65%)", opacity: 0.5 }}
             />
+
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="glass rounded-2xl p-4 text-sm">
-                <div className="font-semibold">Rahul Wale</div>
+                <div className="font-semibold">Identity classified</div>
                 <div className="text-muted-foreground">AI Engineer · Team Lead · Pune, India</div>
               </div>
             </div>
           </div>
+
         </motion.div>
 
         <div className="md:col-span-7">
