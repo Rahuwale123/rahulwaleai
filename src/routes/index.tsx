@@ -263,13 +263,13 @@ function Hero() {
       <div className="absolute -top-32 right-[-10%] -z-10 size-[520px] blob bg-primary" aria-hidden />
       <div className="absolute top-40 left-[-10%] -z-10 size-[380px] blob" aria-hidden style={{ background: "var(--glow)" }} />
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 pb-28 md:grid-cols-12 md:gap-10 md:pb-40">
-        <motion.div style={{ y }} className="md:col-span-7">
+      <div className="mx-auto max-w-4xl px-6 pb-28 text-center md:pb-40">
+        <motion.div style={{ y }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
+            className="mb-8 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
           >
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-60" />
@@ -282,7 +282,7 @@ function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[clamp(2.75rem,7vw,5.75rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
+            className="mx-auto max-w-4xl text-[clamp(2.75rem,8vw,6.5rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
           >
             Building <span className="text-gradient">AI products</span>
             <br />
@@ -293,7 +293,7 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl"
+            className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
           >
             I'm Rahul — an AI/ML engineer shipping production LLM and real-time voice
             systems. Currently leading an AI team at The BAAP Company, mentoring 50+ engineers,
@@ -304,13 +304,13 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-10 flex flex-wrap items-center gap-3"
+            className="mt-10 flex flex-wrap items-center justify-center gap-3"
           >
-            <MagneticButton href="#projects" variant="primary">
-              View projects <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            <MagneticButton href="/rahul-wale-cv.pdf" variant="primary">
+              Download CV <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </MagneticButton>
-            <MagneticButton href="#contact" variant="ghost">
-              Contact me <ArrowUpRight className="size-4" />
+            <MagneticButton href="#projects" variant="ghost">
+              View projects <ArrowUpRight className="size-4" />
             </MagneticButton>
           </motion.div>
 
@@ -318,7 +318,7 @@ function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-12 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground"
+            className="mt-12 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
           >
             {["AI Engineer", "Team Lead", "Full Stack Developer", "Generative AI"].map((r) => (
               <span key={r} className="inline-flex items-center gap-2">
@@ -327,59 +327,8 @@ function Hero() {
             ))}
           </motion.div>
         </motion.div>
-
-        {/* visual */}
-        <motion.div style={{ y: imgY }} className="relative md:col-span-5">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-hairline shadow-lift"
-          >
-            <img
-              src={heroImg}
-              alt="AI developer workspace"
-              width={1280}
-              height={1280}
-              className="size-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
-
-            {/* floating glass cards */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="glass absolute left-4 top-6 rounded-2xl p-3 text-xs shadow-soft"
-            >
-              <div className="flex items-center gap-2">
-                <span className="grid size-7 place-items-center rounded-lg bg-primary/15 text-primary">
-                  <Mic className="size-3.5" />
-                </span>
-                <div>
-                  <div className="font-semibold">Voice agent live</div>
-                  <div className="text-muted-foreground">sub-second latency</div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-              className="glass absolute bottom-6 right-4 rounded-2xl p-3 text-xs shadow-soft"
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid size-7 place-items-center rounded-lg bg-primary/15 text-primary">
-                  <Sparkles className="size-3.5" />
-                </span>
-                <div>
-                  <div className="font-semibold">99% uptime</div>
-                  <div className="text-muted-foreground">500+ concurrent users</div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
       </div>
+
     </section>
   );
 }
