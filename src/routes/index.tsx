@@ -28,10 +28,9 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-import heroImg from "@/assets/hero-workspace.jpg";
-import portraitImg from "@/assets/portrait.jpg";
 import voiceImg from "@/assets/project-voice.jpg";
 import cctvImg from "@/assets/project-cctv.jpg";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
