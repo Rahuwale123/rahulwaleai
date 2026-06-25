@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://rahulwale.vercel.app/</loc>
+    <loc>https://www.rahulwale.dev/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://rahulwale.vercel.app/projects/voice-on-call-ai</loc>
+    <loc>https://www.rahulwale.dev/projects/voice-on-call-ai</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://rahulwale.vercel.app/projects/smartcctv</loc>
+    <loc>https://www.rahulwale.dev/projects/smartcctv</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

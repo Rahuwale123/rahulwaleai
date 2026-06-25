@@ -5,7 +5,7 @@ export const SITE_DESCRIPTION =
 
 const rawSiteUrl = import.meta.env.VITE_SITE_URL as string | undefined;
 
-export const SITE_URL = (rawSiteUrl ?? "https://rahulwale.vercel.app").replace(/\/$/, "");
+export const SITE_URL = (rawSiteUrl ?? "https://www.rahulwale.dev").replace(/\/$/, "");
 export const HAS_SITE_URL = SITE_URL.length > 0;
 
 export function absoluteUrl(path = "/") {
