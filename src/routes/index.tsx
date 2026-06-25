@@ -296,9 +296,8 @@ function Hero() {
             className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg"
           >
             I architect and ship production AI — real-time voice agents, RAG systems, no-code
-            AI tooling, and computer-vision platforms. Currently leading the AI team at{" "}
-            <span className="text-foreground">The BAAP Company</span>, mentoring 50+ engineers and
-            running platforms that serve 500+ concurrent users at 99% uptime.
+            AI tooling, and computer-vision platforms. Currently leading an AI team, mentoring
+            50+ engineers and running platforms that serve 500+ concurrent users at 99% uptime.
           </motion.p>
 
           <motion.div
