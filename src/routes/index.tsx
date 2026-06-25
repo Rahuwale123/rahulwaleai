@@ -486,6 +486,7 @@ function About() {
     { v: 50, s: "+", l: "Engineers mentored" },
     { v: 99, s: "%", l: "Platform uptime" },
   ];
+  const highlights = ["Voice AI", "RAG", "Computer Vision", "Full-stack", "Team Leadership"];
   return (
     <Section
       id="about"
@@ -496,86 +497,36 @@ function About() {
           from <span className="text-gradient">research to production</span>.
         </>
       }
+      intro="Numbers from shipping real systems — not demos."
     >
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="md:col-span-5"
-        >
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-hairline shadow-soft">
-            {/* WANTED poster — mysterious founder */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--surface-2),var(--background))]" />
-            <div className="absolute inset-0 grid-bg opacity-40" aria-hidden />
+      <div className="mb-10 flex flex-wrap gap-2">
+        {highlights.map((h) => (
+          <span
+            key={h}
+            className="rounded-full border border-hairline bg-surface px-3 py-1.5 text-sm font-medium text-foreground/90"
+          >
+            {h}
+          </span>
+        ))}
+      </div>
 
-            <div className="absolute inset-x-0 top-6 text-center">
-              <div className="text-[10px] font-bold uppercase tracking-[0.5em] text-muted-foreground">
-                — Wanted —
-              </div>
-              <div className="mt-1 text-xs font-semibold uppercase tracking-[0.3em] text-foreground/70">
-                AI Founder · Builder · Shipper
-              </div>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {stats.map((s, i) => (
+          <motion.div
+            key={s.l}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.07 }}
+            whileHover={{ y: -4 }}
+            className="rounded-2xl border border-hairline bg-surface p-6 transition-colors hover:bg-surface-2"
+          >
+            <div className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+              <AnimatedNumber value={s.v} suffix={s.s} />
             </div>
-
-            <motion.div
-              animate={{ scale: [1, 1.04, 1], rotate: [-1, 1, -1] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 grid place-items-center"
-            >
-              <span
-                className="text-gradient select-none font-semibold leading-none tracking-tighter"
-                style={{ fontSize: "clamp(12rem, 26vw, 22rem)" }}
-              >
-                ?
-              </span>
-            </motion.div>
-
-            {/* soft glow */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{ background: "radial-gradient(closest-side, var(--glow), transparent 65%)", opacity: 0.5 }}
-            />
-
-            <div className="absolute inset-x-0 bottom-0 p-5">
-              <div className="glass rounded-2xl p-4 text-sm">
-                <div className="font-semibold">Identity classified</div>
-                <div className="text-muted-foreground">AI Engineer · Team Lead · Pune, India</div>
-              </div>
-            </div>
-          </div>
-
-        </motion.div>
-
-        <div className="md:col-span-7">
-          <p className="text-lg leading-relaxed text-muted-foreground md:text-xl">
-            I architect and ship production AI — real-time voice agents, RAG systems, no-code AI tooling,
-            and computer-vision platforms. I care about latency, reliability, and shipping things real
-            humans use. Currently leading the AI team at <span className="text-foreground">The BAAP Company</span>,
-            building products serving rural India at scale.
-          </p>
-
-          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {stats.map((s, i) => (
-              <motion.div
-                key={s.l}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.07 }}
-                whileHover={{ y: -4 }}
-                className="rounded-2xl border border-hairline bg-surface p-5 transition-colors hover:bg-surface-2"
-              >
-                <div className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-                  <AnimatedNumber value={s.v} suffix={s.s} />
-                </div>
-                <div className="mt-2 text-sm text-muted-foreground">{s.l}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+            <div className="mt-2 text-sm text-muted-foreground">{s.l}</div>
+          </motion.div>
+        ))}
       </div>
     </Section>
   );
