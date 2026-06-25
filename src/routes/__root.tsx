@@ -10,7 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import portraitImg from "@/assets/portrait.jpg";
+import shareImg from "@/assets/hero-workspace.jpg";
 import { reportError } from "../lib/error-reporting";
 import { absoluteUrl, HAS_SITE_URL, SITE_DESCRIPTION, SITE_TITLE } from "../lib/site";
 
@@ -94,6 +94,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         property: "og:title",
         content: SITE_TITLE,
       },
+      { property: "og:site_name", content: SITE_TITLE },
       {
         name: "twitter:title",
         content: SITE_TITLE,
@@ -102,18 +103,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "description",
         content: SITE_DESCRIPTION,
       },
+      { name: "theme-color", content: "#070b14" },
       {
         property: "og:description",
         content: SITE_DESCRIPTION,
       },
-      {
-        name: "twitter:description",
-        content: SITE_DESCRIPTION,
-      },
-      { property: "og:image", content: absoluteUrl(portraitImg) },
-      { name: "twitter:image", content: absoluteUrl(portraitImg) },
-      ...(HAS_SITE_URL ? [{ property: "og:url", content: absoluteUrl("/") }] : []),
+      { name: "twitter:description", content: SITE_DESCRIPTION },
+      { property: "og:image", content: absoluteUrl(shareImg) },
+      { name: "twitter:image", content: absoluteUrl(shareImg) },
       { name: "twitter:card", content: "summary_large_image" },
+      ...(HAS_SITE_URL ? [{ property: "og:url", content: absoluteUrl("/") }] : []),
       { property: "og:type", content: "website" },
     ],
     links: [

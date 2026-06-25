@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { ArrowLeft, ArrowUpRight, Sparkles, Cpu, Wrench, Target, Layers } from "lucide-react";
 import { getProject, projects } from "@/data/projects";
+import { absoluteUrl, SITE_NAME, projectUrl } from "../lib/site";
 
 export const Route = createFileRoute("/projects/$slug")({
   head: ({ params }) => {
@@ -13,10 +14,19 @@ export const Route = createFileRoute("/projects/$slug")({
       meta: [
         { title },
         { name: "description", content: description },
+        { name: "author", content: SITE_NAME },
         { property: "og:title", content: title },
+        { property: "og:site_name", content: SITE_NAME },
         { property: "og:description", content: description },
-        ...(p ? [{ property: "og:image", content: p.image }] : []),
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        ...(p ? [{ property: "og:image", content: absoluteUrl(p.image) }] : []),
+        ...(p ? [{ name: "twitter:image", content: absoluteUrl(p.image) }] : []),
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(p ? [{ property: "og:url", content: projectUrl(p.slug) }] : []),
+        { property: "og:type", content: "article" },
       ],
+      links: p ? [{ rel: "canonical", href: projectUrl(p.slug) }] : [],
     };
   },
   loader: ({ params }) => {
@@ -54,9 +64,37 @@ function ProjectPage() {
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
   const otherProjects = projects.filter((p) => p.slug !== project.slug);
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.description,
+    image: absoluteUrl(project.image),
+    url: projectUrl(project.slug),
+    author: {
+      "@type": "Person",
+      name: SITE_NAME,
+      url: absoluteUrl("/"),
+    },
+    about: project.tech,
+    keywords: [
+      SITE_NAME,
+      "AI engineer",
+      "AI full stack developer",
+      "AI developer",
+      "voice AI",
+      "RAG",
+      "computer vision",
+      ...project.tech,
+    ],
+  };
 
   return (
     <main className="relative min-h-screen overflow-x-clip bg-background text-foreground antialiased">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+      />
       {/* Background glow */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute left-1/2 top-0 size-[60rem] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]" />

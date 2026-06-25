@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://rahulwale.vercel.app/sitemap.xml

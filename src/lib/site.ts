@@ -5,10 +5,14 @@ export const SITE_DESCRIPTION =
 
 const rawSiteUrl = import.meta.env.VITE_SITE_URL as string | undefined;
 
-export const SITE_URL = rawSiteUrl ? rawSiteUrl.replace(/\/$/, "") : "";
+export const SITE_URL = (rawSiteUrl ?? "https://rahulwale.vercel.app").replace(/\/$/, "");
 export const HAS_SITE_URL = SITE_URL.length > 0;
 
 export function absoluteUrl(path = "/") {
   if (!SITE_URL) return path;
   return new URL(path, SITE_URL).toString();
+}
+
+export function projectUrl(slug: string) {
+  return absoluteUrl(`/projects/${slug}`);
 }

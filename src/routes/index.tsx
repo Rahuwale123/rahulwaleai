@@ -23,6 +23,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import portraitImg from "@/assets/portrait.jpg";
+import shareImg from "@/assets/hero-workspace.jpg";
 import { absoluteUrl, HAS_SITE_URL, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE } from "../lib/site";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -42,14 +43,22 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: SITE_TITLE },
       { name: "description", content: SITE_DESCRIPTION },
+      { name: "author", content: SITE_NAME },
+      {
+        name: "keywords",
+        content:
+          "Rahul Wale, AI engineer, AI full stack developer, AI developer, full stack developer, voice AI, RAG, computer vision, React, FastAPI, Python, Pune",
+      },
       { property: "og:title", content: SITE_TITLE },
+      { property: "og:site_name", content: SITE_TITLE },
       {
         property: "og:description",
         content: SITE_DESCRIPTION,
       },
       { name: "twitter:title", content: SITE_TITLE },
       { name: "twitter:description", content: SITE_DESCRIPTION },
-      { property: "og:image", content: absoluteUrl(portraitImg) },
+      { property: "og:image", content: absoluteUrl(shareImg) },
+      { name: "twitter:image", content: absoluteUrl(shareImg) },
       ...(HAS_SITE_URL ? [{ property: "og:url", content: absoluteUrl("/") }] : []),
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -183,6 +192,13 @@ function Portfolio() {
       name: "The BAAP Company",
     },
   };
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: absoluteUrl("/"),
+    description: SITE_DESCRIPTION,
+  };
 
   const [dark, setDark] = useState(true);
   const { scrollYProgress } = useScroll();
@@ -209,6 +225,10 @@ function Portfolio() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
       {/* scroll progress */}
       <motion.div
