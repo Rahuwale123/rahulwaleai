@@ -253,22 +253,23 @@ function Nav({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const imgY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const posterY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   return (
-    <section id="top" ref={ref} className="relative hero-gradient pt-40 md:pt-48">
+    <section id="top" ref={ref} className="relative hero-gradient pt-36 md:pt-44">
       <div className="absolute inset-0 -z-10 grid-bg" aria-hidden />
       <div className="absolute -top-32 right-[-10%] -z-10 size-[520px] blob bg-primary" aria-hidden />
       <div className="absolute top-40 left-[-10%] -z-10 size-[380px] blob" aria-hidden style={{ background: "var(--glow)" }} />
 
-      <div className="mx-auto max-w-4xl px-6 pb-28 text-center md:pb-40">
-        <motion.div style={{ y }}>
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-24 md:grid-cols-12 md:gap-10 md:pb-36">
+        {/* LEFT — bio */}
+        <motion.div style={{ y: textY }} className="md:col-span-7">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-8 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
           >
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-60" />
@@ -281,29 +282,30 @@ function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto max-w-4xl text-[clamp(2.75rem,8vw,6.5rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
+            className="text-[clamp(2.5rem,6.5vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
           >
-            Building <span className="text-gradient">AI products</span>
+            Hi, I'm Rahul.
             <br />
-            that scale.
+            <span className="text-gradient">AI engineer, team lead, builder.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
+            className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg"
           >
-            I'm Rahul — an AI/ML engineer shipping production LLM and real-time voice
-            systems. Currently leading an AI team at The BAAP Company, mentoring 50+ engineers,
-            and architecting platforms that serve 500+ concurrent users at 99% uptime.
+            I architect and ship production AI — real-time voice agents, RAG systems, no-code
+            AI tooling, and computer-vision platforms. Currently leading the AI team at{" "}
+            <span className="text-foreground">The BAAP Company</span>, mentoring 50+ engineers and
+            running platforms that serve 500+ concurrent users at 99% uptime.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-3"
+            className="mt-9 flex flex-wrap items-center gap-3"
           >
             <MagneticButton href="/rahul-wale-cv.pdf" variant="primary">
               Download CV <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -317,17 +319,84 @@ function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-12 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+            className="mt-10 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"
           >
-            {["AI Engineer", "Team Lead", "Full Stack Developer", "Generative AI"].map((r) => (
+            {["AI Engineer", "Team Lead", "Full Stack", "Generative AI"].map((r) => (
               <span key={r} className="inline-flex items-center gap-2">
                 <span className="size-1 rounded-full bg-primary" /> {r}
               </span>
             ))}
           </motion.div>
         </motion.div>
-      </div>
 
+        {/* RIGHT — wanted poster */}
+        <motion.div
+          style={{ y: posterY }}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+          className="md:col-span-5"
+        >
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-hairline bg-surface shadow-lift">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--surface-2),var(--background))]" />
+            <div className="absolute inset-0 grid-bg opacity-50" aria-hidden />
+
+            {/* corner ticks */}
+            <div className="pointer-events-none absolute inset-3 rounded-2xl border border-dashed border-hairline" />
+
+            {/* top label */}
+            <div className="absolute inset-x-0 top-6 z-10 text-center">
+              <div className="text-[10px] font-bold uppercase tracking-[0.55em] text-muted-foreground">
+                — Wanted —
+              </div>
+              <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-foreground/80">
+                AI Founder · Builder · Shipper
+              </div>
+            </div>
+
+            {/* classified stamp */}
+            <div className="pointer-events-none absolute right-4 top-16 z-10 rotate-12 rounded-md border-2 border-destructive/70 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em] text-destructive/80">
+              Classified
+            </div>
+
+            {/* pulsing ring + big ? */}
+            <motion.div
+              animate={{ scale: [1, 1.04, 1], rotate: [-1.5, 1.5, -1.5] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 grid place-items-center"
+            >
+              <motion.span
+                animate={{ opacity: [0.35, 0.6, 0.35], scale: [1, 1.08, 1] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute size-56 rounded-full"
+                style={{ background: "radial-gradient(closest-side, var(--glow), transparent 70%)" }}
+              />
+              <span
+                className="text-gradient relative select-none font-semibold leading-none tracking-tighter"
+                style={{ fontSize: "clamp(10rem, 22vw, 18rem)" }}
+              >
+                ?
+              </span>
+            </motion.div>
+
+            {/* reward chip */}
+            <div className="absolute left-4 bottom-24 z-10 inline-flex items-center gap-2 rounded-full border border-hairline bg-background/70 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
+              <Sparkles className="size-3 text-primary" /> Reward: a great hire
+            </div>
+
+            {/* identity card */}
+            <div className="absolute inset-x-0 bottom-0 p-4">
+              <div className="glass rounded-2xl p-3.5 text-sm">
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold">Identity classified</div>
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">#001</div>
+                </div>
+                <div className="mt-0.5 text-xs text-muted-foreground">AI Engineer · Team Lead · Pune, India</div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }
@@ -417,6 +486,7 @@ function About() {
     { v: 50, s: "+", l: "Engineers mentored" },
     { v: 99, s: "%", l: "Platform uptime" },
   ];
+  const highlights = ["Voice AI", "RAG", "Computer Vision", "Full-stack", "Team Leadership"];
   return (
     <Section
       id="about"
@@ -427,86 +497,36 @@ function About() {
           from <span className="text-gradient">research to production</span>.
         </>
       }
+      intro="Numbers from shipping real systems — not demos."
     >
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="md:col-span-5"
-        >
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-hairline shadow-soft">
-            {/* WANTED poster — mysterious founder */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--surface-2),var(--background))]" />
-            <div className="absolute inset-0 grid-bg opacity-40" aria-hidden />
+      <div className="mb-10 flex flex-wrap gap-2">
+        {highlights.map((h) => (
+          <span
+            key={h}
+            className="rounded-full border border-hairline bg-surface px-3 py-1.5 text-sm font-medium text-foreground/90"
+          >
+            {h}
+          </span>
+        ))}
+      </div>
 
-            <div className="absolute inset-x-0 top-6 text-center">
-              <div className="text-[10px] font-bold uppercase tracking-[0.5em] text-muted-foreground">
-                — Wanted —
-              </div>
-              <div className="mt-1 text-xs font-semibold uppercase tracking-[0.3em] text-foreground/70">
-                AI Founder · Builder · Shipper
-              </div>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {stats.map((s, i) => (
+          <motion.div
+            key={s.l}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.07 }}
+            whileHover={{ y: -4 }}
+            className="rounded-2xl border border-hairline bg-surface p-6 transition-colors hover:bg-surface-2"
+          >
+            <div className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+              <AnimatedNumber value={s.v} suffix={s.s} />
             </div>
-
-            <motion.div
-              animate={{ scale: [1, 1.04, 1], rotate: [-1, 1, -1] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 grid place-items-center"
-            >
-              <span
-                className="text-gradient select-none font-semibold leading-none tracking-tighter"
-                style={{ fontSize: "clamp(12rem, 26vw, 22rem)" }}
-              >
-                ?
-              </span>
-            </motion.div>
-
-            {/* soft glow */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{ background: "radial-gradient(closest-side, var(--glow), transparent 65%)", opacity: 0.5 }}
-            />
-
-            <div className="absolute inset-x-0 bottom-0 p-5">
-              <div className="glass rounded-2xl p-4 text-sm">
-                <div className="font-semibold">Identity classified</div>
-                <div className="text-muted-foreground">AI Engineer · Team Lead · Pune, India</div>
-              </div>
-            </div>
-          </div>
-
-        </motion.div>
-
-        <div className="md:col-span-7">
-          <p className="text-lg leading-relaxed text-muted-foreground md:text-xl">
-            I architect and ship production AI — real-time voice agents, RAG systems, no-code AI tooling,
-            and computer-vision platforms. I care about latency, reliability, and shipping things real
-            humans use. Currently leading the AI team at <span className="text-foreground">The BAAP Company</span>,
-            building products serving rural India at scale.
-          </p>
-
-          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {stats.map((s, i) => (
-              <motion.div
-                key={s.l}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.07 }}
-                whileHover={{ y: -4 }}
-                className="rounded-2xl border border-hairline bg-surface p-5 transition-colors hover:bg-surface-2"
-              >
-                <div className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-                  <AnimatedNumber value={s.v} suffix={s.s} />
-                </div>
-                <div className="mt-2 text-sm text-muted-foreground">{s.l}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+            <div className="mt-2 text-sm text-muted-foreground">{s.l}</div>
+          </motion.div>
+        ))}
       </div>
     </Section>
   );
