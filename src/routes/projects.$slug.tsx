@@ -7,7 +7,7 @@ import { getProject, projects } from "@/data/projects";
 export const Route = createFileRoute("/projects/$slug")({
   head: ({ params }) => {
     const p = getProject(params.slug);
-    const title = p ? `${p.title} — Rahul Wale` : "Project — Rahul Wale";
+    const title = p ? `${p.title} | Rahul Wale` : "Project | Rahul Wale";
     const description = p?.tagline ?? "Project case study by Rahul Wale.";
     return {
       meta: [
@@ -154,7 +154,11 @@ function ProjectPage() {
       {/* Problem / Solution */}
       <Block>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <Card icon={<Target className="size-5" />} eyebrow="The problem" title="What needed solving">
+          <Card
+            icon={<Target className="size-5" />}
+            eyebrow="The problem"
+            title="What needed solving"
+          >
             <p className="text-muted-foreground">{project.problem}</p>
           </Card>
           <Card icon={<Sparkles className="size-5" />} eyebrow="The solution" title="What I built">

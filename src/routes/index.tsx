@@ -1,6 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useScroll, useSpring, useTransform, useMotionValue, type Variants } from "motion/react";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useMotionValue,
+  type Variants,
+} from "motion/react";
 import {
   ArrowUpRight,
   Mail,
@@ -15,6 +22,8 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
+import portraitImg from "@/assets/portrait.jpg";
+import { absoluteUrl, HAS_SITE_URL, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE } from "../lib/site";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -28,26 +37,24 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rahul Wale — AI Engineer & Full-Stack Developer" },
-      {
-        name: "description",
-        content:
-          "Rahul Wale — AI Engineer and Team Lead building production LLM, voice AI, and full-stack systems. Shipping AI products at scale.",
-      },
-      { property: "og:title", content: "Rahul Wale — AI Engineer & Full-Stack Developer" },
+      { title: SITE_TITLE },
+      { name: "description", content: SITE_DESCRIPTION },
+      { property: "og:title", content: SITE_TITLE },
       {
         property: "og:description",
-        content:
-          "Building AI products that scale. LLMs, real-time voice agents, RAG, and full-stack systems shipped to production.",
+        content: SITE_DESCRIPTION,
       },
+      { name: "twitter:title", content: SITE_TITLE },
+      { name: "twitter:description", content: SITE_DESCRIPTION },
+      { property: "og:image", content: absoluteUrl(portraitImg) },
+      ...(HAS_SITE_URL ? [{ property: "og:url", content: absoluteUrl("/") }] : []),
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: HAS_SITE_URL ? [{ rel: "canonical", href: absoluteUrl("/") }] : [],
   }),
   component: Portfolio,
 });
@@ -104,11 +111,13 @@ function MagneticButton({
   variant = "primary",
   href,
   className = "",
+  download,
 }: {
   children: ReactNode;
   variant?: "primary" | "ghost";
   href: string;
   className?: string;
+  download?: boolean | string;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
@@ -138,6 +147,7 @@ function MagneticButton({
         x.set(0);
         y.set(0);
       }}
+      download={download}
       className={`${base} ${styles} ${className}`}
     >
       {children}
@@ -148,6 +158,32 @@ function MagneticButton({
 // ---------- page ----------
 
 function Portfolio() {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: SITE_NAME,
+    url: absoluteUrl("/"),
+    image: absoluteUrl(portraitImg),
+    jobTitle: "AI Engineer and Full-Stack Developer",
+    description: SITE_DESCRIPTION,
+    sameAs: ["https://github.com/Rahuwale123", "https://linkedin.com/in/rahul-wale"],
+    knowsAbout: [
+      "AI engineering",
+      "AI full stack development",
+      "voice AI",
+      "RAG systems",
+      "computer vision",
+      "LLM applications",
+      "React",
+      "FastAPI",
+      "Python",
+    ],
+    worksFor: {
+      "@type": "Organization",
+      name: "The BAAP Company",
+    },
+  };
+
   const [dark, setDark] = useState(true);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 20, mass: 0.2 });
@@ -170,6 +206,10 @@ function Portfolio() {
 
   return (
     <div className="relative min-h-screen overflow-x-clip bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       {/* scroll progress */}
       <motion.div
         style={{ scaleX: progress }}
@@ -182,7 +222,8 @@ function Portfolio() {
         style={{ x: cursorX, y: cursorY }}
         className="pointer-events-none fixed left-0 top-0 z-40 hidden size-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full md:block"
       >
-        <div className="size-full rounded-full opacity-40 blur-3xl"
+        <div
+          className="size-full rounded-full opacity-40 blur-3xl"
           style={{ background: "radial-gradient(closest-side, var(--primary), transparent 70%)" }}
         />
       </motion.div>
@@ -220,8 +261,13 @@ function Nav({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-4 z-40 mx-auto flex max-w-6xl items-center justify-between px-6"
     >
-      <a href="#top" className="glass flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold">
-        <span className="grid size-6 place-items-center rounded-full bg-primary text-primary-foreground">R</span>
+      <a
+        href="#top"
+        className="glass flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold"
+      >
+        <span className="grid size-6 place-items-center rounded-full bg-primary text-primary-foreground">
+          R
+        </span>
         Rahul Wale
       </a>
       <nav className="glass hidden items-center gap-1 rounded-full px-2 py-1.5 text-sm md:flex">
@@ -257,8 +303,15 @@ function Hero() {
   return (
     <section id="top" ref={ref} className="relative hero-gradient pt-36 md:pt-44">
       <div className="absolute inset-0 -z-10 grid-bg" aria-hidden />
-      <div className="absolute -top-32 right-[-10%] -z-10 size-[520px] blob bg-primary" aria-hidden />
-      <div className="absolute top-40 left-[-10%] -z-10 size-[380px] blob" aria-hidden style={{ background: "var(--glow)" }} />
+      <div
+        className="absolute -top-32 right-[-10%] -z-10 size-[520px] blob bg-primary"
+        aria-hidden
+      />
+      <div
+        className="absolute top-40 left-[-10%] -z-10 size-[380px] blob"
+        aria-hidden
+        style={{ background: "var(--glow)" }}
+      />
 
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-24 md:grid-cols-12 md:gap-10 md:pb-36">
         {/* LEFT — bio */}
@@ -282,9 +335,9 @@ function Hero() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="text-[clamp(2.5rem,6.5vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
           >
-            Hi, I'm Rahul.
+            Hi, I'm Rahul Wale.
             <br />
-            <span className="text-gradient">AI engineer, team lead, builder.</span>
+            <span className="text-gradient">AI engineer, AI full stack developer, builder.</span>
           </motion.h1>
 
           <motion.p
@@ -293,9 +346,10 @@ function Hero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg"
           >
-            I architect and ship production AI — real-time voice agents, RAG systems, no-code
-            AI tooling, and computer-vision platforms. Currently leading an AI team, mentoring
-            50+ engineers and running platforms that serve 500+ concurrent users at 99% uptime.
+            I am Rahul Wale, an AI engineer and full-stack developer who builds production AI
+            systems — real-time voice agents, RAG products, no-code AI tooling, and computer- vision
+            platforms. I lead AI delivery, mentor 50+ engineers, and run platforms that serve 500+
+            concurrent users at 99% uptime.
           </motion.p>
 
           <motion.div
@@ -304,8 +358,9 @@ function Hero() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="mt-9 flex flex-wrap items-center gap-3"
           >
-            <MagneticButton href="/rahul-wale-cv.pdf" variant="primary">
-              Download CV <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            <MagneticButton href="/resume.pdf" variant="primary" download>
+              Download CV{" "}
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </MagneticButton>
             <MagneticButton href="#projects" variant="ghost">
               View projects <ArrowUpRight className="size-4" />
@@ -318,7 +373,7 @@ function Hero() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mt-10 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"
           >
-            {["AI Engineer", "Team Lead", "Full Stack", "Generative AI"].map((r) => (
+            {["AI Engineer", "AI Full Stack Developer", "Team Lead", "Generative AI"].map((r) => (
               <span key={r} className="inline-flex items-center gap-2">
                 <span className="size-1 rounded-full bg-primary" /> {r}
               </span>
@@ -366,7 +421,9 @@ function Hero() {
                 animate={{ opacity: [0.35, 0.6, 0.35], scale: [1, 1.08, 1] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute size-56 rounded-full"
-                style={{ background: "radial-gradient(closest-side, var(--glow), transparent 70%)" }}
+                style={{
+                  background: "radial-gradient(closest-side, var(--glow), transparent 70%)",
+                }}
               />
               <span
                 className="text-gradient relative select-none font-semibold leading-none tracking-tighter"
@@ -386,9 +443,13 @@ function Hero() {
               <div className="glass rounded-2xl p-3.5 text-sm">
                 <div className="flex items-center justify-between">
                   <div className="font-semibold">Identity classified</div>
-                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">#001</div>
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                    #001
+                  </div>
                 </div>
-                <div className="mt-0.5 text-xs text-muted-foreground">AI Engineer · Team Lead · Pune, India</div>
+                <div className="mt-0.5 text-xs text-muted-foreground">
+                  AI Engineer · Team Lead · Pune, India
+                </div>
               </div>
             </div>
           </div>
@@ -494,7 +555,7 @@ function About() {
           from <span className="text-gradient">research to production</span>.
         </>
       }
-      intro="Numbers from shipping real systems — not demos."
+      intro="A portfolio of production AI engineering, full-stack delivery, and shipped systems."
     >
       <div className="mb-10 flex flex-wrap gap-2">
         {highlights.map((h) => (
@@ -533,10 +594,37 @@ function About() {
 
 function Skills() {
   const groups: { name: string; items: string[] }[] = [
-    { name: "AI & GenAI", items: ["Gemini", "LangChain", "RAG", "AI Agents", "Prompt Engineering", "Hugging Face", "LLM Evaluation", "Guardrails"] },
-    { name: "Voice AI", items: ["Pipecat", "Deepgram", "Sarvam AI", "Twilio Voice", "VAD", "WebSocket audio", "Vosk", "VITS"] },
+    {
+      name: "AI & GenAI",
+      items: [
+        "Gemini",
+        "LangChain",
+        "RAG",
+        "AI Agents",
+        "Prompt Engineering",
+        "Hugging Face",
+        "LLM Evaluation",
+        "Guardrails",
+      ],
+    },
+    {
+      name: "Voice AI",
+      items: [
+        "Pipecat",
+        "Deepgram",
+        "Sarvam AI",
+        "Twilio Voice",
+        "VAD",
+        "WebSocket audio",
+        "Vosk",
+        "VITS",
+      ],
+    },
     { name: "Computer Vision", items: ["YOLOv9", "ArcFace", "OpenCV", "Real-time video"] },
-    { name: "Backend", items: ["FastAPI", "Python", "PostgreSQL", "Redis", "REST APIs", "WebSockets"] },
+    {
+      name: "Backend",
+      items: ["FastAPI", "Python", "PostgreSQL", "Redis", "REST APIs", "WebSockets"],
+    },
     { name: "Frontend & Mobile", items: ["Next.js", "React", "Flutter"] },
     { name: "Infrastructure", items: ["Docker", "AWS (EC2, S3)", "Firebase", "Git", "CI/CD"] },
   ];
@@ -546,7 +634,7 @@ function Skills() {
       id="skills"
       eyebrow="Skills"
       title={<>The stack I ship with.</>}
-      intro="A focused toolkit for production LLM, voice, vision, and full-stack systems."
+      intro="A focused toolkit for AI engineering, AI full stack development, voice, vision, and backend systems."
     >
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {groups.map((g, i) => (
@@ -561,7 +649,9 @@ function Skills() {
           >
             <div className="absolute -right-12 -top-12 size-40 rounded-full bg-primary/10 opacity-0 blur-2xl transition-opacity group-hover:opacity-100" />
             <div className="mb-5 flex items-center justify-between">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{g.name}</h3>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                {g.name}
+              </h3>
               <span className="text-xs text-muted-foreground">{g.items.length}</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -669,7 +759,9 @@ function ProjectCard({
 
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
-              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Results</div>
+              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Results
+              </div>
               <ul className="space-y-1.5 text-sm">
                 {results.map((r) => (
                   <li key={r} className="flex items-start gap-2">
@@ -680,10 +772,15 @@ function ProjectCard({
               </ul>
             </div>
             <div>
-              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tech</div>
+              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Tech
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 {tech.map((t) => (
-                  <span key={t} className="rounded-md border border-hairline bg-background px-2 py-1 text-xs text-foreground/80">
+                  <span
+                    key={t}
+                    className="rounded-md border border-hairline bg-background px-2 py-1 text-xs text-foreground/80"
+                  >
                     {t}
                   </span>
                 ))}
@@ -759,7 +856,8 @@ function Experience() {
       eyebrow="Experience"
       title={
         <>
-          AI Engineer & Team Lead<br />
+          AI Engineer & Team Lead
+          <br />
           <span className="text-gradient">The BAAP Company</span>
         </>
       }
@@ -807,18 +905,43 @@ function Experience() {
 
 function Services() {
   const services = [
-    { icon: Bot, title: "AI Agents", body: "Autonomous, tool-using agents with guardrails and evals." },
-    { icon: Mic, title: "Voice AI Systems", body: "Real-time multilingual voice over phone & web — STT, LLM, TTS." },
-    { icon: MessageSquare, title: "RAG Chatbots", body: "Production RAG over your knowledge base with citations." },
-    { icon: Code2, title: "Full-Stack Builds", body: "FastAPI + Next.js + Flutter, shipped end-to-end." },
-    { icon: Eye, title: "Computer Vision", body: "YOLO + ArcFace pipelines for live video & CCTV intelligence." },
-    { icon: Sparkles, title: "Custom AI Solutions", body: "From research spike to production rollout, owned by one team." },
+    {
+      icon: Bot,
+      title: "AI Agents",
+      body: "Autonomous, tool-using agents with guardrails and evals.",
+    },
+    {
+      icon: Mic,
+      title: "Voice AI Systems",
+      body: "Real-time multilingual voice over phone & web — STT, LLM, TTS.",
+    },
+    {
+      icon: MessageSquare,
+      title: "RAG Chatbots",
+      body: "Production RAG over your knowledge base with citations.",
+    },
+    {
+      icon: Code2,
+      title: "Full-Stack Builds",
+      body: "FastAPI + Next.js + Flutter, shipped end-to-end.",
+    },
+    {
+      icon: Eye,
+      title: "Computer Vision",
+      body: "YOLO + ArcFace pipelines for live video & CCTV intelligence.",
+    },
+    {
+      icon: Sparkles,
+      title: "Custom AI Solutions",
+      body: "From research spike to production rollout, owned by one team.",
+    },
   ];
   return (
     <Section
       id="services"
       eyebrow="Services"
       title={<>How I can help your team.</>}
+      intro="AI engineering, AI full stack development, voice AI, and computer vision delivered as working products."
     >
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {services.map((s, i) => (
@@ -831,8 +954,12 @@ function Services() {
             whileHover={{ y: -6 }}
             className="group relative overflow-hidden rounded-3xl border border-hairline bg-surface p-6 transition-all hover:border-primary/30"
           >
-            <div className="absolute inset-0 -z-10 opacity-0 transition-opacity group-hover:opacity-100"
-              style={{ background: "radial-gradient(400px 200px at 50% 0%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%)" }}
+            <div
+              className="absolute inset-0 -z-10 opacity-0 transition-opacity group-hover:opacity-100"
+              style={{
+                background:
+                  "radial-gradient(400px 200px at 50% 0%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%)",
+              }}
             />
             <div className="mb-5 inline-grid size-11 place-items-center rounded-2xl border border-hairline bg-background text-primary transition-transform group-hover:scale-110">
               <s.icon className="size-5" />
@@ -865,7 +992,7 @@ function TechWall() {
   ];
   return (
     <Section id="tech" eyebrow="Tech wall" title={<>The systems behind the work.</>}>
-      <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {tech.map((t, i) => (
           <motion.div
             key={t}
@@ -941,11 +1068,20 @@ function Contact() {
           }}
           className="glass relative overflow-hidden rounded-3xl p-6 shadow-lift lg:col-span-3 md:p-8"
         >
-          <div className="absolute -right-20 -top-20 size-72 blob bg-primary opacity-30" aria-hidden />
+          <div
+            className="absolute -right-20 -top-20 size-72 blob bg-primary opacity-30"
+            aria-hidden
+          />
           <div className="relative space-y-5">
             <Field label="Name" name="name" placeholder="Your name" required />
             <Field label="Email" name="email" type="email" placeholder="you@company.com" required />
-            <Field label="Message" name="message" placeholder="What are you building?" required textarea />
+            <Field
+              label="Message"
+              name="message"
+              placeholder="What are you building?"
+              required
+              textarea
+            />
             <button
               type="submit"
               className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-medium text-background transition-transform hover:scale-[1.01]"
@@ -1016,9 +1152,21 @@ function Field({
         {label}
       </span>
       {textarea ? (
-        <textarea name={name} required={required} placeholder={placeholder} rows={4} className={cls} />
+        <textarea
+          name={name}
+          required={required}
+          placeholder={placeholder}
+          rows={4}
+          className={cls}
+        />
       ) : (
-        <input name={name} type={type} required={required} placeholder={placeholder} className={cls} />
+        <input
+          name={name}
+          type={type}
+          required={required}
+          placeholder={placeholder}
+          className={cls}
+        />
       )}
     </label>
   );

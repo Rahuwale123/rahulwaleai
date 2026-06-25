@@ -113,16 +113,7 @@ export const projects: Project[] = [
     description:
       "Upgrades existing IP CCTV cameras into intelligent monitoring — no hardware replacement. Connect a camera and the system becomes instantly intelligent with face recognition, attendance, and unknown-person alerts.",
     image: cctvImg,
-    tech: [
-      "Python",
-      "YOLOv9",
-      "ArcFace",
-      "OpenCV",
-      "FastAPI",
-      "React",
-      "PostgreSQL",
-      "Redis",
-    ],
+    tech: ["Python", "YOLOv9", "ArcFace", "OpenCV", "FastAPI", "React", "PostgreSQL", "Redis"],
     results: [
       "Deployed across 20+ cameras at pilot sites",
       "10,000+ daily face-recognition events",
