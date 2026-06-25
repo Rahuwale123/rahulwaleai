@@ -296,12 +296,17 @@ function Nav({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
 
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
+  const posterFrameRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const textY = useTransform(scrollYProgress, [0, 1], [0, 60]);
   const posterY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const tiltXSmooth = useSpring(tiltX, { stiffness: 180, damping: 18 });
+  const tiltYSmooth = useSpring(tiltY, { stiffness: 180, damping: 18 });
 
   return (
-    <section id="top" ref={ref} className="relative hero-gradient pt-36 md:pt-44">
+    <section id="top" ref={ref} className="relative hero-gradient pt-28 md:pt-32">
       <div className="absolute inset-0 -z-10 grid-bg" aria-hidden />
       <div
         className="absolute -top-32 right-[-10%] -z-10 size-[520px] blob bg-primary"
@@ -313,14 +318,14 @@ function Hero() {
         style={{ background: "var(--glow)" }}
       />
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-24 md:grid-cols-12 md:gap-10 md:pb-36">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-6 pb-16 md:grid-cols-12 md:items-start md:gap-8 md:pb-20 lg:min-h-[calc(100svh-8rem)]">
         {/* LEFT — bio */}
-        <motion.div style={{ y: textY }} className="md:col-span-7">
+        <motion.div style={{ y: textY }} className="md:col-span-8 md:pt-6 lg:pt-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
           >
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-60" />
@@ -333,7 +338,7 @@ function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[clamp(2.5rem,6.5vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
+            className="max-w-[11ch] text-[clamp(2.2rem,5vw,4.35rem)] font-semibold leading-[0.95] tracking-[-0.03em] lg:max-w-none lg:text-[clamp(2.5rem,4.2vw,4.6rem)]"
           >
             Hi, I'm Rahul Wale.
             <br />
@@ -344,10 +349,10 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg"
+            className="mt-5 max-w-lg text-[0.98rem] leading-relaxed text-muted-foreground md:mt-6 md:text-[1.02rem] lg:max-w-xl"
           >
             I am Rahul Wale, an AI engineer and full-stack developer who builds production AI
-            systems — real-time voice agents, RAG products, no-code AI tooling, and computer- vision
+            systems — real-time voice agents, RAG products, no-code AI tooling, and computer vision
             platforms. I lead AI delivery, mentor 50+ engineers, and run platforms that serve 500+
             concurrent users at 99% uptime.
           </motion.p>
@@ -356,7 +361,7 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-9 flex flex-wrap items-center gap-3"
+            className="mt-7 flex flex-wrap items-center gap-3"
           >
             <MagneticButton href="/resume.pdf" variant="primary" download>
               Download CV{" "}
@@ -371,7 +376,7 @@ function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-10 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"
+            className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"
           >
             {["AI Engineer", "AI Full Stack Developer", "Team Lead", "Generative AI"].map((r) => (
               <span key={r} className="inline-flex items-center gap-2">
@@ -387,9 +392,31 @@ function Hero() {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          className="md:col-span-5"
+          className="md:col-span-4 md:mt-6 md:self-center lg:mt-8 lg:pt-2"
         >
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-hairline bg-surface shadow-lift">
+          <motion.div
+            ref={posterFrameRef}
+            style={{
+              rotateX: tiltXSmooth,
+              rotateY: tiltYSmooth,
+              transformPerspective: 1400,
+              transformStyle: "preserve-3d",
+            }}
+            onMouseMove={(e) => {
+              if (window.innerWidth < 1024) return;
+              const r = posterFrameRef.current?.getBoundingClientRect();
+              if (!r) return;
+              const px = (e.clientX - r.left) / r.width - 0.5;
+              const py = (e.clientY - r.top) / r.height - 0.5;
+              tiltY.set(px * 10);
+              tiltX.set(-py * 8);
+            }}
+            onMouseLeave={() => {
+              tiltX.set(0);
+              tiltY.set(0);
+            }}
+            className="relative mx-auto aspect-[4/5] w-full max-w-[19rem] overflow-hidden rounded-3xl border border-hairline bg-surface shadow-lift lg:max-w-[20.5rem]"
+          >
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--surface-2),var(--background))]" />
             <div className="absolute inset-0 grid-bg opacity-50" aria-hidden />
 
@@ -397,17 +424,17 @@ function Hero() {
             <div className="pointer-events-none absolute inset-3 rounded-2xl border border-dashed border-hairline" />
 
             {/* top label */}
-            <div className="absolute inset-x-0 top-6 z-10 text-center">
+            <div className="absolute inset-x-0 top-5 z-10 text-center">
               <div className="text-[10px] font-bold uppercase tracking-[0.55em] text-muted-foreground">
                 — Wanted —
               </div>
-              <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-foreground/80">
+              <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-foreground/80">
                 AI Founder · Builder · Shipper
               </div>
             </div>
 
             {/* classified stamp */}
-            <div className="pointer-events-none absolute right-4 top-16 z-10 rotate-12 rounded-md border-2 border-destructive/70 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em] text-destructive/80">
+            <div className="pointer-events-none absolute right-4 top-14 z-10 rotate-12 rounded-md border-2 border-destructive/70 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-destructive/80">
               Classified
             </div>
 
@@ -420,21 +447,21 @@ function Hero() {
               <motion.span
                 animate={{ opacity: [0.35, 0.6, 0.35], scale: [1, 1.08, 1] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute size-56 rounded-full"
+                className="absolute size-52 rounded-full lg:size-60"
                 style={{
                   background: "radial-gradient(closest-side, var(--glow), transparent 70%)",
                 }}
               />
               <span
                 className="text-gradient relative select-none font-semibold leading-none tracking-tighter"
-                style={{ fontSize: "clamp(10rem, 22vw, 18rem)" }}
+                style={{ fontSize: "clamp(9rem, 17.5vw, 15.75rem)" }}
               >
                 ?
               </span>
             </motion.div>
 
             {/* reward chip */}
-            <div className="absolute left-4 bottom-24 z-10 inline-flex items-center gap-2 rounded-full border border-hairline bg-background/70 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
+            <div className="absolute left-4 bottom-20 z-10 inline-flex items-center gap-2 rounded-full border border-hairline bg-background/70 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
               <Sparkles className="size-3 text-primary" /> Reward: a great hire
             </div>
 
@@ -452,7 +479,7 @@ function Hero() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
