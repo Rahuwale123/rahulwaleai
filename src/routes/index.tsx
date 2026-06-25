@@ -586,7 +586,10 @@ function Skills() {
 
 // ---------- projects ----------
 
+import { projects as projectData } from "@/data/projects";
+
 function ProjectCard({
+  slug,
   title,
   subtitle,
   description,
@@ -595,6 +598,7 @@ function ProjectCard({
   image,
   index,
 }: {
+  slug: string;
   title: string;
   subtitle: string;
   description: string;
@@ -631,52 +635,65 @@ function ProjectCard({
       style={{ rotateX: srx, rotateY: sry, transformPerspective: 1200 }}
       className="group relative overflow-hidden rounded-3xl border border-hairline bg-surface shadow-soft"
     >
-      <div className="relative aspect-[16/10] overflow-hidden">
-        <motion.img
-          src={image}
-          alt={title}
-          loading="lazy"
-          width={1280}
-          height={800}
-          className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-        <div className="absolute left-5 top-5">
-          <span className="glass rounded-full px-3 py-1 text-xs font-medium">{subtitle}</span>
-        </div>
-      </div>
-
-      <div className="relative p-6 md:p-8">
-        <div className="flex items-start justify-between gap-4">
-          <h3 className="text-2xl font-semibold tracking-tight md:text-3xl">{title}</h3>
-          <ArrowUpRight className="size-5 shrink-0 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
-        </div>
-        <p className="mt-4 max-w-2xl text-muted-foreground">{description}</p>
-
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Results</div>
-            <ul className="space-y-1.5 text-sm">
-              {results.map((r) => (
-                <li key={r} className="flex items-start gap-2">
-                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
-                  <span>{r}</span>
-                </li>
-              ))}
-            </ul>
+      <Link
+        to="/projects/$slug"
+        params={{ slug }}
+        className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <div className="relative aspect-[16/10] overflow-hidden">
+          <motion.img
+            src={image}
+            alt={title}
+            loading="lazy"
+            width={1280}
+            height={800}
+            className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+          <div className="absolute left-5 top-5">
+            <span className="glass rounded-full px-3 py-1 text-xs font-medium">{subtitle}</span>
           </div>
-          <div>
-            <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tech</div>
-            <div className="flex flex-wrap gap-1.5">
-              {tech.map((t) => (
-                <span key={t} className="rounded-md border border-hairline bg-background px-2 py-1 text-xs text-foreground/80">
-                  {t}
-                </span>
-              ))}
+          <div className="absolute right-5 top-5 translate-y-1 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-soft">
+              Read case study <ArrowUpRight className="size-3.5" />
+            </span>
+          </div>
+        </div>
+
+        <div className="relative p-6 md:p-8">
+          <div className="flex items-start justify-between gap-4">
+            <h3 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-primary md:text-3xl">
+              {title}
+            </h3>
+            <ArrowUpRight className="size-5 shrink-0 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+          </div>
+          <p className="mt-4 max-w-2xl text-muted-foreground">{description}</p>
+
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Results</div>
+              <ul className="space-y-1.5 text-sm">
+                {results.map((r) => (
+                  <li key={r} className="flex items-start gap-2">
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+                    <span>{r}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tech</div>
+              <div className="flex flex-wrap gap-1.5">
+                {tech.map((t) => (
+                  <span key={t} className="rounded-md border border-hairline bg-background px-2 py-1 text-xs text-foreground/80">
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </motion.article>
   );
 }
@@ -691,35 +708,22 @@ function Projects() {
           Shipped, scaled, <span className="text-gradient">in production</span>.
         </>
       }
-      intro="Production systems serving real users — not demos."
+      intro="Production systems serving real users — not demos. Click a project to read the full case study."
     >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <ProjectCard
-          index={0}
-          title="Voice-on-Call AI Platform"
-          subtitle="Real-time multilingual voice agent"
-          description="A real-time AI voice assistant that lets citizens lodge civic queries over a phone call in their native Indian language. I owned the full stack — ML pipeline, FastAPI backend, React dashboard, and Twilio voice integration."
-          tech={["Pipecat", "Gemini", "Sarvam AI", "Deepgram", "Twilio", "FastAPI", "React", "WebSockets"]}
-          results={[
-            "99% uptime under 500+ concurrent calls",
-            "Sub-second response with VAD + barge-in",
-            "Cut manual call-centre workload by 60%",
-          ]}
-          image={voiceImg}
-        />
-        <ProjectCard
-          index={1}
-          title="SmartCCTV — AI Surveillance"
-          subtitle="Plug-and-play AI for IP cameras"
-          description="Upgrades existing IP CCTV cameras into intelligent monitoring — no hardware replacement. Connect a camera and the system becomes instantly intelligent with face recognition, attendance, and unknown-person alerts."
-          tech={["Python", "YOLOv9", "ArcFace", "OpenCV", "FastAPI", "React", "PostgreSQL", "Redis"]}
-          results={[
-            "Deployed across 20+ cameras at pilot sites",
-            "10,000+ daily face-recognition events",
-            "Live React monitoring dashboard",
-          ]}
-          image={cctvImg}
-        />
+        {projectData.map((p, i) => (
+          <ProjectCard
+            key={p.slug}
+            index={i}
+            slug={p.slug}
+            title={p.title}
+            subtitle={p.subtitle}
+            description={p.description}
+            tech={p.tech}
+            results={p.results}
+            image={p.image}
+          />
+        ))}
       </div>
     </Section>
   );
