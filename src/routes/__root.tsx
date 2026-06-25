@@ -96,10 +96,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:site_name", content: SITE_TITLE },
       {
-        name: "twitter:title",
-        content: SITE_TITLE,
-      },
-      {
         name: "description",
         content: SITE_DESCRIPTION,
       },
@@ -108,10 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         property: "og:description",
         content: SITE_DESCRIPTION,
       },
-      { name: "twitter:description", content: SITE_DESCRIPTION },
       { property: "og:image", content: absoluteUrl(shareImg) },
-      { name: "twitter:image", content: absoluteUrl(shareImg) },
-      { name: "twitter:card", content: "summary_large_image" },
       ...(HAS_SITE_URL ? [{ property: "og:url", content: absoluteUrl("/") }] : []),
       { property: "og:type", content: "website" },
     ],
