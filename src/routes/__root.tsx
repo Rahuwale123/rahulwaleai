@@ -129,6 +129,12 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          src="https://a3d6-103-112-11-19.ngrok-free.app/embed.js"
+          data-client-id="a3ea1cda-c735-4798-8219-54bbb07795a9"
+          data-user-id="f78cb891-1ba0-4f54-9e94-d0e428d65073"
+          async
+        />
       </head>
       <body>
         {children}
